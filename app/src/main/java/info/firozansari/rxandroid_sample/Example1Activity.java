@@ -31,34 +31,31 @@ public class Example1Activity extends AppCompatActivity {
     private void createObservable() {
         Observable<List<String>> listObservable = Observable.just(getColorList());
 
-        listObservable.observeOn(Schedulers.newThread());
+        listObservable.observeOn(Schedulers.newThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<String>>() {
 
-        listObservable.subscribeOn(AndroidSchedulers.mainThread());
+                @Override
+                public void onComplete() {
+                    Log.d(TAG, "onComplete: called.");
+                }
 
-        listObservable.subscribe(new Observer<List<String>>() {
+                @Override
+                public void onError(Throwable e) {
 
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "onComplete: called.");
-            }
+                }
 
-            @Override
-            public void onError(Throwable e) {
+                @Override
+                public void onSubscribe(Disposable d) {
 
-            }
+                }
 
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(List<String> colors) {
-                //This is going to be running in Main thread.
-                mSimpleAdapter.setStrings(colors);
-            }
-        });
-
+                @Override
+                public void onNext(List<String> colors) {
+                    //This is going to be running in Main thread.
+                    mSimpleAdapter.setStrings(colors);
+                }
+            });
     }
 
     private void configureLayout() {
