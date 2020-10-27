@@ -1,7 +1,7 @@
 package info.firozansari.rxandroid_sample;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
 //import io.reactivex.SingleSubscriber;
 //import io.reactivex.functions.Func1;

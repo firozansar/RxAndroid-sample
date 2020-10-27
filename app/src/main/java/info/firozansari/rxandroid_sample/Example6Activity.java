@@ -1,9 +1,9 @@
 package info.firozansari.rxandroid_sample;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -11,8 +11,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+import org.reactivestreams.Subscription;
 
 //import io.reactivex.Subscription;
 //import io.reactivex.functions.Func1;
@@ -26,7 +34,7 @@ public class Example6Activity extends AppCompatActivity {
     private SimpleAdapter mSearchResultsAdapter;
 
     private PublishSubject<String> mSearchResultsSubject;
-    //private Subscription mTextWatchSubscription;
+    private Subscription mTextWatchSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,33 +47,35 @@ public class Example6Activity extends AppCompatActivity {
 
     private void createObservables() {
         mSearchResultsSubject = PublishSubject.create();
-        /*mTextWatchSubscription = mSearchResultsSubject
-                .debounce(400, TimeUnit.MILLISECONDS)
-                .observeOn(Schedulers.io())
-                .map(new Func1<String, List<String>>() {
-                    @Override
-                    public List<String> call(String s) {
-                        return mRestClient.searchForCity(s);
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<String>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<String> cities) {
-                        handleSearchResults(cities);
-                    }
-                });*/
+//        mTextWatchSubscription = mSearchResultsSubject
+//                .debounce(400, TimeUnit.MILLISECONDS)
+//                .observeOn(Schedulers.io())
+//                .map(new Function<String, Object>() {
+//                    @Override
+//                    public Object apply(String s) throws Exception {
+//                        return mRestClient.searchForCity(s);
+//                    }
+//                })
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new SingleObserver<List<String>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(List<String> cities) {
+//                        handleSearchResults(cities);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable error) {
+//
+//                    }
+//                });
     }
+
+
 
     private void handleSearchResults(List<String> cities) {
         if (cities.isEmpty()) {
