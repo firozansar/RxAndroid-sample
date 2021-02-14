@@ -18,32 +18,32 @@
         </activity>
 
         <activity
-            android:name=".Example1Activity"
+            android:name=".ColorListActivity"
             android:parentActivityName=".MainActivity"
             />
 
         <activity
-            android:name=".Example2Activity"
+            android:name=".TVShowsActivity"
             android:parentActivityName=".MainActivity"
             />
 
         <activity
-            android:name=".Example3Activity"
+            android:name=".ImprovedTVShowsActivity"
             android:parentActivityName=".MainActivity"
             />
 
         <activity
-            android:name=".Example4Activity"
+            android:name=".ButtonCounterActivity"
             android:parentActivityName=".MainActivity"
             />
 
         <activity
-            android:name=".Example5Activity"
+            android:name=".ValueDisplayActivity"
             android:parentActivityName=".MainActivity"
             />
 
         <activity
-            android:name=".Example6Activity"
+            android:name=".CitySearchActivity"
             android:parentActivityName=".MainActivity"
             />
     </application>

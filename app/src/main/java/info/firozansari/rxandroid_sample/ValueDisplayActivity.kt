@@ -1,19 +1,17 @@
-package info.firozansari.rxandroid_sample;
+package info.firozansari.rxandroid_sample
 
-import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import android.widget.TextView;
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
 //import io.reactivex.SingleSubscriber;
 //import io.reactivex.functions.Func1;
-
-public class Example5Activity extends AppCompatActivity {
-
-    private TextView mValueDisplay;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        configureLayout();
+class ValueDisplayActivity : AppCompatActivity() {
+    private var mValueDisplay: TextView? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        configureLayout()
 
         /*Single.just(4).map(new Func1<Integer, String>() {
             @Override
@@ -33,8 +31,8 @@ public class Example5Activity extends AppCompatActivity {
         });*/
     }
 
-    private void configureLayout() {
-        setContentView(R.layout.activity_example_5);
-        mValueDisplay = (TextView) findViewById(R.id.value_display);
+    private fun configureLayout() {
+        setContentView(R.layout.activity_value_display)
+        mValueDisplay = findViewById<View>(R.id.value_display) as TextView
     }
 }
