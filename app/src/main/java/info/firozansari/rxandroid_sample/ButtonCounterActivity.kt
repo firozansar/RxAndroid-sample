@@ -1,5 +1,6 @@
 package info.firozansari.rxandroid_sample
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -7,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.PublishSubject
 
 class ButtonCounterActivity : AppCompatActivity() {
@@ -20,16 +22,14 @@ class ButtonCounterActivity : AppCompatActivity() {
         createCounterEmitter()
     }
 
+    @SuppressLint("CheckResult")
     private fun createCounterEmitter() {
         mCounterEmitter = PublishSubject.create()
-        mCounterEmitter!!.subscribe(object : Observer<Int> {
-            override fun onComplete() {}
-            override fun onError(e: Throwable) {}
-            override fun onSubscribe(d: Disposable) {}
-            override fun onNext(integer: Int) {
-                mCounterDisplay!!.text = integer.toString()
-            }
-        })
+        mCounterEmitter?.subscribeBy(  // named arguments for lambda Subscribers
+            onNext = { mCounterDisplay?.text = it.toString() },
+            onError =  { it.printStackTrace() },
+            onComplete = { println("Done!") }
+        )
     }
 
     private fun configureLayout() {
@@ -40,16 +40,16 @@ class ButtonCounterActivity : AppCompatActivity() {
 
     private fun configureCounterDisplay() {
         mCounterDisplay = findViewById<View>(R.id.counter_display) as TextView
-        mCounterDisplay!!.text = mCounter.toString()
+        mCounterDisplay?.text = mCounter.toString()
     }
 
     private fun configureIncrementButton() {
         mIncrementButton = findViewById<View>(R.id.increment_button) as Button
-        mIncrementButton!!.setOnClickListener { onIncrementButtonClick() }
+        mIncrementButton?.setOnClickListener { onIncrementButtonClick() }
     }
 
     private fun onIncrementButtonClick() {
         mCounter++
-        mCounterEmitter!!.onNext(mCounter)
+        mCounterEmitter?.onNext(mCounter)
     }
 }

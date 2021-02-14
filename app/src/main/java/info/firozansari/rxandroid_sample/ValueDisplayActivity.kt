@@ -1,34 +1,32 @@
 package info.firozansari.rxandroid_sample
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.rxkotlin.toObservable
 
-//import io.reactivex.SingleSubscriber;
-//import io.reactivex.functions.Func1;
 class ValueDisplayActivity : AppCompatActivity() {
     private var mValueDisplay: TextView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         configureLayout()
+        createObservable()
+    }
 
-        /*Single.just(4).map(new Func1<Integer, String>() {
-            @Override
-            public String call(Integer integer) {
-                return String.valueOf(integer);
-            }
-        }).subscribe(new SingleSubscriber<String>() {
-            @Override
-            public void onSuccess(String value) {
-                  mValueDisplay.setText(value);
-            }
-
-            @Override
-            public void onError(Throwable error) {
-
-            }
-        });*/
+    @SuppressLint("CheckResult")
+    private fun createObservable() {
+        val list = listOf("Alpha", "Beta", "Gamma", "Delta", "Epsilon")
+        list.toObservable() // extension function for Iterables
+            .filter { it.length >= 5 }
+            .subscribeBy(  // named arguments for lambda Subscribers
+                onNext = { mValueDisplay?.setText(it) },
+                onError = { it.printStackTrace() },
+                onComplete = { println("Done!") }
+            )
     }
 
     private fun configureLayout() {

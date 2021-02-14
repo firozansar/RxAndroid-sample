@@ -1,5 +1,6 @@
 package info.firozansari.rxandroid_sample
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.PublishSubject
 import org.reactivestreams.Subscription
 
@@ -19,7 +22,7 @@ class CitySearchActivity : AppCompatActivity() {
     private var mSearchResults: RecyclerView? = null
     private var mSearchResultsAdapter: SimpleAdapter? = null
     private var mSearchResultsSubject: PublishSubject<String>? = null
-    private val mTextWatchSubscription: Subscription? = null
+    private var mTextWatchSubscription: Subscription? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mRestClient = RestClient(this)
@@ -28,37 +31,19 @@ class CitySearchActivity : AppCompatActivity() {
         listenToSearchInput()
     }
 
+    @SuppressLint("CheckResult")
     private fun createObservables() {
         mSearchResultsSubject = PublishSubject.create()
-        //        mTextWatchSubscription = mSearchResultsSubject
-//                .debounce(400, TimeUnit.MILLISECONDS)
-//                .observeOn(Schedulers.io())
-//                .map(new Function<String, Object>() {
-//                    @Override
-//                    public Object apply(String s) throws Exception {
-//                        return mRestClient.searchForCity(s);
-//                    }
-//                })
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new SingleObserver<List<String>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(List<String> cities) {
-//                        handleSearchResults(cities);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable error) {
-//
-//                    }
-//                });
+        mSearchResultsSubject!!
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = { handleSearchResults(it) },
+                onError =  { it.printStackTrace() },
+                onComplete = { println("Done!") }
+            )
     }
 
-    private fun handleSearchResults(cities: List<String>) {
+    private fun handleSearchResults(cities: String) {
         if (cities.isEmpty()) {
             showNoSearchResults()
         } else {
@@ -67,18 +52,18 @@ class CitySearchActivity : AppCompatActivity() {
     }
 
     private fun showNoSearchResults() {
-        mNoResultsIndicator!!.visibility = View.VISIBLE
-        mSearchResults!!.visibility = View.GONE
+        mNoResultsIndicator?.visibility = View.VISIBLE
+        mSearchResults?.visibility = View.GONE
     }
 
-    private fun showSearchResults(cities: List<String>) {
-        mNoResultsIndicator!!.visibility = View.GONE
-        mSearchResults!!.visibility = View.VISIBLE
-        mSearchResultsAdapter!!.setStrings(cities)
+    private fun showSearchResults(cities: String) {
+        mNoResultsIndicator?.visibility = View.GONE
+        mSearchResults?.visibility = View.VISIBLE
+        mSearchResultsAdapter?.setStrings(listOf(cities))
     }
 
     private fun listenToSearchInput() {
-        mSearchInput!!.addTextChangedListener(object : TextWatcher {
+        mSearchInput?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 mSearchResultsSubject!!.onNext(s.toString())
@@ -100,8 +85,6 @@ class CitySearchActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        /*if (mTextWatchSubscription != null && !mTextWatchSubscription.isUnsubscribed()) {
-            mTextWatchSubscription.unsubscribe();
-        }*/
+        mTextWatchSubscription?.cancel()
     }
 }

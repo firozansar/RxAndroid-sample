@@ -58,8 +58,8 @@ class TVShowsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tvshow)
         mProgressBar = findViewById<View>(R.id.loader) as ProgressBar
         mTvShowListView = findViewById<View>(R.id.tv_show_list) as RecyclerView
-        mTvShowListView!!.layoutManager = LinearLayoutManager(this)
+        mTvShowListView?.layoutManager = LinearLayoutManager(this)
         mSimpleAdapter = SimpleAdapter(this)
-        mTvShowListView!!.adapter = mSimpleAdapter
+        mTvShowListView?.adapter = mSimpleAdapter
     }
 }
