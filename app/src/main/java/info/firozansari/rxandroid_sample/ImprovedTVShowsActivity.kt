@@ -31,12 +31,7 @@ class ImprovedTVShowsActivity : AppCompatActivity() {
             /**
              * Uncomment me (and comment out the line below) to see what happens when an error occurs.
              *
-             * return RestClient.getFavoriteTvShowsWithException();
-             */
-            /**
-             * Uncomment me (and comment out the line below) to see what happens when an error occurs.
-             *
-             * return RestClient.getFavoriteTvShowsWithException();
+             * return mRestClient.getFavoriteTvShowsWithException();
              */
             mRestClient!!.favoriteTvShows
         }

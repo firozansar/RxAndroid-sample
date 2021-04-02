@@ -23,7 +23,7 @@ class ValueDisplayActivity : AppCompatActivity() {
         list.toObservable() // extension function for Iterables
             .filter { it.length >= 5 }
             .subscribeBy(  // named arguments for lambda Subscribers
-                onNext = { mValueDisplay?.setText(it) },
+                onNext = { mValueDisplay?.text = it },
                 onError = { it.printStackTrace() },
                 onComplete = { println("Done!") }
             )
